@@ -1,0 +1,232 @@
+#################################
+##    Qiime2 analysis notes    ##
+##   EXPORTS NP + NA samples   ##
+##    Sasha Kramer -  MBARI    ##
+#################################
+
+## 1) Load Qiime2
+## Qiime2 version qiime2-2022.2
+
+conda activate qiime2-2022.2
+
+
+## 2) Denoising samples - need to do this step before the rest of the Qiime pipeline
+## Based on Colleen's "FK170124_18S_Qiime_commands.txt" on GitHub + "Colleen_EXPORTSNA_Qiime.txt" + "Sebastian_EXPORTSNA_Qiime.txt"
+## https://github.com/cadurkin/FK170124_Qiime2-18S
+## Assumes data have been demultiplexed and barcodes removed
+## Includes removing primers (not required for all samples, check before continuing)
+
+## Start with 2021 sample run
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ~/data/original_files/20211115_Amplicon_PE250/20211115_EXPORTS1_18S_PE_rawreads/ \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_demux-paired-end.qza
+
+qiime demux summarize \
+--i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_demux-paired-end.qza \
+--o-visualization EXPORTSNP_demux.qzv
+
+## Median of 32,000 reads per sample, total of 10,182,215 reads
+
+## Use dada2 to quality control the paired end data
+## Trim off the primer sequences (20 bp forward, 15 bp reverse), and don't trim off any of the 3' end because high quality
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_demux-paired-end.qza \
+--o-representative-sequences ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_rep-seqs.qza \
+--o-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table.qza \
+--o-denoising-stats ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_stats.qza \
+--p-trunc-len-f 250 \
+--p-trunc-len-r 250 \
+--p-trim-left-f 20 \
+--p-trim-left-r 15
+
+qiime feature-table group \
+	--i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table.qza  \
+	--p-axis sample \
+	--m-metadata-file ~/projects/Rhizaria/20211115_Amplicon_metadata.tsv \
+	--m-metadata-column ID_unique \
+	--p-mode sum \
+	--o-grouped-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table_renamed.qza
+
+qiime feature-table summarize \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table_renamed.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table_renamed.qzv \
+  --m-sample-metadata-file ~/projects/Rhizaria/20211115_Amplicon_metadata_renamed.tsv
+
+## Then July 2022 sample run
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ~/data/original_files/20220707_Amplicon_PE250/rawreads/ \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_demux-paired-end.qza
+
+qiime demux summarize \
+--i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_demux-paired-end.qza \
+--o-visualization EXPORTSNA_demux.qzv
+
+## Median of 14,000 reads per sample, total of 8,196,035 reads
+
+## Use dada2 to quality control the paired end data
+## Trim off the primer sequences (20 bp forward, 15 bp reverse), and don't trim off any of the 3' end because high quality
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_demux-paired-end.qza \
+--o-representative-sequences ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_rep-seqs.qza \
+--o-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table.qza \
+--o-denoising-stats ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_stats.qza \
+--p-trunc-len-f 250 \
+--p-trunc-len-r 250 \
+--p-trim-left-f 20 \
+--p-trim-left-r 15
+
+qiime feature-table group \
+	--i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table.qza  \
+	--p-axis sample \
+	--m-metadata-file ~/projects/Rhizaria/20220707_Amplicon_metadata.tsv \
+	--m-metadata-column ID_unique \
+	--p-mode sum \
+	--o-grouped-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table_renamed.qza
+
+qiime feature-table summarize \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table_renamed.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table_renamed.qzv \
+  --m-sample-metadata-file ~/projects/Rhizaria/20220707_Amplicon_metadata.tsv
+
+## Then Oct 2022 sample run
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ~/data/original_files/20221026_Amplicon_PE250/rawreads/20221026_Amplicon_PE250/ \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_demux-paired-end.qza
+
+qiime demux summarize \
+--i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_demux-paired-end.qza \
+--o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_demux.qzv
+
+## Median of 41,600 reads per sample, total of 7,837,232 reads
+
+## Use dada2 to quality control the paired end data
+## Trim off the primer sequences (20 bp forward, 15 bp reverse), and don't trim off any of the 3' end because high quality
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_demux-paired-end.qza \
+--o-representative-sequences ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_rep-seqs.qza \
+--o-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table.qza \
+--o-denoising-stats ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_stats.qza \
+--p-trunc-len-f 250 \
+--p-trunc-len-r 250 \
+--p-trim-left-f 20 \
+--p-trim-left-r 15
+
+qiime feature-table group \
+	--i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table.qza  \
+	--p-axis sample \
+	--m-metadata-file ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/metadata/20221026_Amplicon_metadata.tsv \
+	--m-metadata-column ID_unique \
+	--p-mode sum \
+	--o-grouped-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table_renamed.qza
+
+qiime feature-table summarize \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table_renamed.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table_renamed.qzv \
+  --m-sample-metadata-file ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/metadata/20221026_Amplicon_metadata.tsv
+
+## Finally Erin's surface data
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path ~/data/original_files/20221213_EXPORTS_Rynearson \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_demux-paired-end.qza
+
+qiime demux summarize \
+--i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_demux-paired-end.qza \
+--o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_demux.qzv
+
+## Median of 133,110 reads per sample, total of 14,909,213 reads
+
+## Use dada2 to quality control the paired end data
+## Trim off the primer sequences (20 bp forward, 15 bp reverse), and don't trim off any of the 3' end because high quality
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_demux-paired-end.qza \
+--o-representative-sequences ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_rep-seqs.qza \
+--o-table ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table.qza \
+--o-denoising-stats ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_stats.qza \
+--p-trunc-len-f 250 \
+--p-trunc-len-r 250 \
+--p-trim-left-f 20 \
+--p-trim-left-r 15
+
+qiime feature-table group \
+	--i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table.qza  \
+	--p-axis sample \
+	--m-metadata-file ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/metadata/20221213_Jones_EXPORTS_metadata.tsv \
+	--m-metadata-column ID_unique \
+	--p-mode sum \
+	--o-grouped-table ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table_renamed.qza
+
+qiime feature-table summarize \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table_renamed.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table_renamed.qzv \
+  --m-sample-metadata-file ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/metadata/20221213_Jones_EXPORTS_metadata.tsv
+
+
+## 3) Combining data from different sequencing runs
+## Assumes samples were already denoised
+## Based on Colleen's "Qiime_notes_EXPORTS_for_Rhizaria.txt"
+## https://github.com/cadurkin/FK170124_Qiime2-18S
+
+##Merge the feature tables, now that the mock communities have different names
+qiime feature-table merge \
+  --i-tables ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_table_renamed.qza \
+  --i-tables ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_table_renamed.qza \
+  --i-tables ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_table_renamed.qza \
+  --i-tables ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_table_renamed.qza \
+  --o-merged-table ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_table.qza
+	
+qiime feature-table merge-seqs \
+  --i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthPacific/EXPORTSNP_18S_rep-seqs.qza \
+  --i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic/EXPORTSNA_18S_rep-seqs.qza  \
+  --i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/NorthAtlantic2/EXPORTSNA2_18S_rep-seqs.qza  \
+  --i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/Rynearson/EXPORTSsurf_18S_rep-seqs.qza  \
+  --o-merged-data ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_rep-seqs.qza
+
+qiime feature-table tabulate-seqs \
+  --i-data ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Oct22/EXPORTS_18S_rep-seqs.qza  \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_rep-seqs.qzv
+
+qiime tools extract \
+  --input-path ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_table.qza \
+  --output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_feature_table.qza
+
+#biom convert -i feature-table.biom -o EXPORTS_18S_Oct22_feature_table --to-tsv
+
+
+## 4) Classify sequences using PR2
+## Using the PR2 classifier that Sebastian Sudek trained
+qiime feature-classifier classify-sklearn \
+  --i-classifier ~/databases/pr2_version_4.14.0_mothur/pr2_version_4.14.0_mothur.classifier.qza \
+  --i-reads ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_rep-seqs.qza \
+  --o-classification ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_taxonomy.qza
+
+qiime metadata tabulate \
+  --m-input-file ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_taxonomy.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_taxonomy.qzv
+
+
+##Rarefy data
+qiime diversity alpha-rarefaction \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_table.qza \
+  --p-max-depth 5000 \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_rarefaction.qzv
+
+qiime feature-table rarefy \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_table.qza \
+  --p-sampling-depth 5000 \
+  --o-rarefied-table ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_table_rare5000.qza
+
+qiime feature-table summarize \
+  --i-table ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_table_rare5000.qza \
+  --o-visualization ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_table_rare5000.qzv
+
+qiime tools extract \
+  --input-path ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_table_rare5000.qza \
+  --output-path ~/projects/Kramer/EXPORTS_18S/denoised_data/all/Jan23/EXPORTS_18S_Jan23_feature_rare5000.qza
