@@ -1,7 +1,9 @@
 # EXPORTS_particle_DNA
 Processing code for analysis of DNA sequences collected from surface water samples, in bulk sediment traps, and from individual sinking particles as part of the EXport Processes in the Ocean from RemoTe Sensing (EXPORTS) field campaigns. DNA extraction and 18S rRNA gene amplification details can be found in Durkin et al. (2022).
 
-Processing of 18S rRNA gene sequence files was conducted following Durkin et al. (2022) using QIIME2 (Bolyen et al., 2019) and the DADA2 (Callahan et al., 2016) workflow. Taxonomic identities were assigned to amplicon sequence variants (ASVs) based on comparison to the PR2 database (Guillou et al., 2013; v 4.14.0, downloaded September 2022) with a naïve Bayes classifier (Bokulich et al., 2018). Taxa were assigned to photosynthetic or heterotrophic following Supplementary Table 2 in Durkin et al. (2022) and adding photosynthetic taxa found in this dataset that were not found in that dataset (photosynthetic_taxa.csv). Given the large variability in sequence counts across different sample types, rarefaction of the data was also performed using QIIME2 using only the photosynthetic taxa (Weiss et al., 2017). 
+Processing of 18S rRNA gene sequence files was conducted following Durkin et al. (2022) using QIIME2 (Bolyen et al., 2019) and the DADA2 (Callahan et al., 2016) workflow. Taxonomic identities were assigned to amplicon sequence variants (ASVs) based on comparison to the PR2 database (Guillou et al., 2013; v 4.14.0, downloaded September 2022) with a naïve Bayes classifier (Bokulich et al., 2018). Example QIIME code for training a classifier with PR2 v5.0.0 is also included. 
+
+Taxa were assigned to photosynthetic or heterotrophic following Supplementary Table 2 in Durkin et al. (2022) and adding photosynthetic taxa found in this dataset that were not found in that dataset (photosynthetic_taxa.csv). Given the large variability in sequence counts across different sample types, rarefaction of the data was also performed using QIIME2 using only the photosynthetic taxa (Weiss et al., 2017). 
 
 Please reference the following work if you use this code to inform your own work:
 
