@@ -1,0 +1,41 @@
+#################################
+##   Training PR2 classifier   ##
+##  to use with 18S rRNA data  ##
+##    Sasha Kramer   MBARI     ##
+#################################
+
+## primers from Sebastian on CFE drive in databases
+
+## 1) Load Qiime2
+## Qiime2 version qiime2-amplicon-2024.2
+
+conda activate qiime2-amplicon-2024.2
+
+cd Documents/MBARI/Postdoc/Data/PR2/
+
+## 2) Train classifier - code from https://github.com/allenlab/QIIME2_18Sv9_ASV_protocol
+qiime tools import \
+  --type 'FeatureData[Sequence]' \
+  --input-path ~/databases/pr2_version_5.0.0/PR2/pr2_version_5.0.0_SSU_mothur.fasta  \
+  --output-path ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0.qza
+
+# import taxonomy
+qiime tools import \
+  --type 'FeatureData[Taxonomy]' \
+  --input-format HeaderlessTSVTaxonomyFormat \
+  --input-path ~/databases/pr2_version_5.0.0/PR2/pr2_version_5.0.0_SSU_mothur.tax \
+  --output-path ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0_tax.qza
+
+qiime feature-classifier extract-reads \
+  --i-sequences ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0.qza \
+  --p-f-primer CCAGCASCYGCGGTAATTCC \
+  --p-r-primer ACTTTCGTTCTTGAT \
+  --p-min-length 200 \
+  --p-max-length 500 \
+  --o-reads ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0_extracts.qza
+
+# Train the classifier
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0_extracts.qza \
+  --i-reference-taxonomy ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0_tax.qza \
+  --o-classifier ~/databases/pr2_version_5.0.0/PR2/pr2_v5.0.0_classifier.qza
