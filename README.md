@@ -3,7 +3,7 @@ Processing code for analysis of DNA sequences collected from surface water sampl
 
 Processing of 18S rRNA gene sequence files was conducted following Durkin et al. (2022) using QIIME2 (Bolyen et al., 2019) and the DADA2 (Callahan et al., 2016) workflow. Taxonomic identities were assigned to amplicon sequence variants (ASVs) based on comparison to the PR2 database (Guillou et al., 2013; v 4.14.0, downloaded September 2022) with a naïve Bayes classifier (Bokulich et al., 2018). Example QIIME code for training a classifier with PR2 v5.0.0 is also included. 
 
-Taxa were assigned to photosynthetic or heterotrophic following Supplementary Table 2 in Durkin et al. (2022) and adding photosynthetic taxa found in this dataset that were not found in that dataset (photosynthetic_taxa.csv). Given the large variability in sequence counts across different sample types, rarefaction of the data was also performed using QIIME2 using only the photosynthetic taxa (Weiss et al., 2017). 
+Taxa were assigned to photosynthetic or heterotrophic following Supplementary Table 2 in Durkin et al. (2022) and adding photosynthetic taxa found in this dataset that were not found in that dataset (photosynthetic_taxa.csv). If analyzing data processed with PR2 v5.0.0, the photosynthetic taxa in the file "photosynthetic_taxa_v5_0_0.csv" should be used.
 
 Please reference the following work if you use this code to inform your own work:
 
@@ -16,5 +16,3 @@ Callahan, B. J., McMurdie, P. J., Rosen, M. J., Han, A. W., Johnson, A. J. A., &
 Durkin, C., Cetinić, I., Estapa, M. L., Ljubešić, Z., Mucko, M., Neeley, A., & Omand, M. M. (2022). Tracing the path of carbon export in the ocean though DNA sequencing of individual sinking particles. The ISME Journal, 1–11. https://doi.org/10.1038/s41396-022-01239-2
 
 Guillou, L., Bachar, D., Audic, S., Bass, D., Berney, C., Bittner, L., et al. (2013). The Protist Ribosomal Reference database (PR2): a catalog of unicellular eukaryote Small Sub-Unit rRNA sequences with curated taxonomy. Nucleic Acids Research, 41(D1), D597–D604. https://doi.org/10.1093/nar/gks1160
-
-Weiss, S., Xu, Z. Z., Peddada, S., Amir, A., Bittinger, K., Gonzalez, A., et al. (2017). Normalization and microbial differential abundance strategies depend upon data characteristics. Microbiome, 5(1), 27. https://doi.org/10.1186/s40168-017-0237-y
