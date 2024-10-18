@@ -7,7 +7,7 @@ Taxa were assigned to photosynthetic or heterotrophic following Supplementary Ta
 
 Please reference the following work if you use this code to inform your own work:
 
-Kramer, S.J., E.L. Jones, N.L. Paul, M.L. Estapa, T.A. Rynearson, A.E. Santoro, S. Sudek, C.A. Durkin. Ocean carbon export can be predicted from ocean color-based phytoplankton communities. In review. https://doi.org/10.1101/2024.09.21.613760
+Kramer, S.J., E.L. Jones, N.L. Paul, M.L. Estapa, T.A. Rynearson, A.E. Santoro, S. Sudek, C.A. Durkin (2024). Ocean carbon export can be predicted from ocean color-based phytoplankton communities. _In review_. https://doi.org/10.1101/2024.09.21.613760
 
 Bokulich, N. A., Kaehler, B. D., Rideout, J. R., Dillon, M., Bolyen, E., Knight, R., et al. (2018). Optimizing taxonomic classification of marker-gene amplicon sequences with QIIME 2’s q2-feature-classifier plugin. Microbiome, 6(1), 90. https://doi.org/10.1186/s40168-018-0470-z
 
