@@ -2,6 +2,7 @@
 %MBARI
 
 %%%EXPORTS 18S Aitchison clr transform + PCA
+%Figure 1 in Kramer et al., 2025
 cd ~/18S/QIIME/Jan23
 load EXPORTS_18S_20230106.mat
 
