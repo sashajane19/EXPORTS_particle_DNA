@@ -3,7 +3,7 @@
 """
 Sasha Kramer
 MBARI
-
+Figure 3 in Kramer et al., 2025
 """
 ###Plotly treemaps for surface ASVs to different deep pools
 import plotly.express as px
