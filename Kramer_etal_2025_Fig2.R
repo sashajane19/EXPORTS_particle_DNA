@@ -1,6 +1,8 @@
 ---
   title: "Upset Plot for EXPORTS 18S samples"
 # Sasha Kramer
+# MBARI
+# Figure 2 in Kramer et al., 2025
 # guide: https://cran.r-project.org/web/packages/UpSetR/readme/README.html
 # and: https://upset.app/implementations/#python-libraries
 ---
