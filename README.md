@@ -9,7 +9,7 @@ Taxa were assigned to photosynthetic or heterotrophic following Supplementary Ta
 
 Please reference the following work if you use this code to inform your own work:
 
-Kramer, S. J., Jones, E. L., Estapa, M. L., Paul, N. L., Rynearson, T. A., Santoro, A. E., et al. (2025). Sinking particles exporting diatoms and hacrobia predict the magnitude of oceanic POC flux. _The ISME Journal_, wraf105. https://doi.org/10.1093/ismejo/wraf105
+Kramer, S. J., Jones, E. L., Estapa, M. L., Paul, N. L., Rynearson, T. A., Santoro, A. E., Sudek, S., Durkin, C.A. (2025). Sinking particles exporting diatoms and hacrobia predict the magnitude of oceanic POC flux. _The ISME Journal_, wraf105. https://doi.org/10.1093/ismejo/wraf105
 
 Bokulich, N. A., Kaehler, B. D., Rideout, J. R., Dillon, M., Bolyen, E., Knight, R., et al. (2018). Optimizing taxonomic classification of marker-gene amplicon sequences with QIIME 2’s q2-feature-classifier plugin. _Microbiome_, 6(1), 90. https://doi.org/10.1186/s40168-018-0470-z
 
